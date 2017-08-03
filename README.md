@@ -29,3 +29,20 @@ payload = { url: 'https://www.redbubble.com/people/wytrab8/works/26039653-toadal
 
 event_bus.publish!(topic, subtopic, payload)
 ```
+
+Credits
+-------
+
+[![](doc/redbubble.png)][redbubble]
+
+Megaphone::Client is maintained and funded by [Redbubble][redbubble].
+
+  [redbubble]: https://www.redbubble.com
+
+License
+-------
+
+    Megaphone::Client
+    Copyright (C) 2017 Redbubble
+
+    All rights reserved.
