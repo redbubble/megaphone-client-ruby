@@ -6,11 +6,12 @@ require 'megaphone/client/version'
 Gem::Specification.new do |spec|
   spec.name          = "megaphone-client"
   spec.version       = Megaphone::Client::VERSION
-  spec.authors       = ["Gonzalo Bulnes Guilpain", "Guilherme Reis Campos"]
-  spec.email         = ["gonzalo.bulnes@redbubble.com", "guilherme.campos@redbubble.com"]
+  spec.authors       = ["Redbubble", "Gonzalo Bulnes Guilpain", "Guilherme Reis Campos"]
+  spec.email         = ["developers@redbubble.com", "gonzalo.bulnes@redbubble.com", "guilherme.campos@redbubble.com"]
 
   spec.summary       = "Send events to Megaphone."
   spec.homepage      = "https://github.com/redbubble/megaphone-client-ruby"
+  spec.license       = "GPL-3.0"
 
   spec.files         = []
   spec.require_paths = ["lib"]
