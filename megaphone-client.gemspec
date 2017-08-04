@@ -13,7 +13,7 @@ Gem::Specification.new do |spec|
   spec.homepage      = "https://github.com/redbubble/megaphone-client-ruby"
   spec.license       = "GPL-3.0"
 
-  spec.files         = `git ls-files`.split($/)
+  spec.files         = Dir["{doc,lib}/**/*", "LICENSE", "README.md", "CHANGELOG.md"]
   spec.require_paths = ["lib"]
 
   spec.add_dependency "fluent-logger", "~> 0.7.0"
