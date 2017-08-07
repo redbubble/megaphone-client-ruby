@@ -10,15 +10,15 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 
 ## 0.1.2 - 2017-08-04
 
-### Fix
+### Fixed
 
 - Removing unnecessary files from gemspec
 
 ## 0.1.1 - 2017-08-03
 
-### Fix
+### Fixed
 
-- Including files in .gemspec
+- Including files in gemspec
 
 ## 0.1.0 - 2017-08-03
 
