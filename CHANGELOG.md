@@ -8,21 +8,23 @@ this project versions are for now mere release numbers. They don't have any part
 This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 
-## 0.1.2 - 2017-08-04
+## [0.1.2] - 2017-08-04
 
-### Fix
+### Fixed
 
 - Removing unnecessary files from gemspec
 
-## 0.1.1 - 2017-08-03
+## [0.1.1] - 2017-08-03
 
-### Fix
+### Fixed
 
-- Including files in .gemspec
+- Including files in gemspec
 
-## 0.1.0 - 2017-08-03
+## 0.1.0 - 2017-08-03 [YANKED]
 
 ### Added
 
 - Initial implementation of the `Megaphone::Client.publish!` method
 
+  [0.1.2]: https://github.com/redbubble/megaphone-client-ruby/compare/v0.1.1...v0.1.2
+  [0.1.1]: https://github.com/redbubble/megaphone-client-ruby/compare/v0.1.0...v0.1.1
