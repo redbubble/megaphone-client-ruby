@@ -18,6 +18,7 @@ gem 'megaphone-client', '~> 0.1.0'
 
 Usage
 -----
+The client will append events to local files unless a `MEGAPHONE_FLUENT_HOST` and `MEGAPHONE_FLUENT_PORT` environment variables are set.
 
 To publish an event on Megaphone
 ```ruby
@@ -57,4 +58,3 @@ License
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
