@@ -8,9 +8,7 @@ module Megaphone
 
       def_delegators :@logger, :post, :last_error
 
-      def initialize
-        host = 'localhost'
-        port = 24224
+      def initialize(host, port)
         @logger = Fluent::Logger::FluentLogger.new('megaphone',
                                                    host: host,
                                                    port: port)

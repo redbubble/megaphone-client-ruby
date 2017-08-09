@@ -1,4 +1,4 @@
-require 'megaphone/client/fluent_logger'
+require 'megaphone/client/logger'
 require 'megaphone/client/errors'
 require 'megaphone/client/event'
 require 'megaphone/client/version'
@@ -8,7 +8,7 @@ module Megaphone
     attr_reader :logger, :origin
     private :logger, :origin
 
-    def initialize(config, logger = Megaphone::Client::FluentLogger.new)
+    def initialize(config, logger = Megaphone::Client::Logger.create)
       @logger = logger
       @origin = config.fetch(:origin)
     end
