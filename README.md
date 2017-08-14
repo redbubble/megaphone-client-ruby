@@ -13,7 +13,7 @@ Add the gem to your `Gemfile`:
 ```ruby
 # Gemfile
 
-gem 'megaphone-client', '~> 0.1.0'
+gem 'megaphone-client', '~> 0.2.0'
 ```
 
 Usage
@@ -26,9 +26,11 @@ event_bus = Megaphone::Client.new({ origin: 'my-awesome-service' })
 
 topic = :page_changes
 subtopic = :product_pages
+schema = 'http://www.github.com/redbuble/megaphone-event-type-registry/topics/cats'
+partition_key = '1357924680'
 payload = { url: 'https://www.redbubble.com/people/wytrab8/works/26039653-toadally-rad?grid_pos=1&p=mens-graphic-t-shirt&rbs=29c497ad-a976-42b8-aa40-0e218903c558&ref=shop_grid&style=mens' }
 
-event_bus.publish!(topic, subtopic, payload)
+event_bus.publish!(topic, subtopic, schema, partition_key, payload)
 ```
 
 Credits
