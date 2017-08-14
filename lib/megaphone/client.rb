@@ -13,8 +13,8 @@ module Megaphone
       @origin = config.fetch(:origin)
     end
 
-    def publish!(topic, subtopic, payload)
-      event = Event.new(topic, subtopic, origin, payload)
+    def publish!(topic, subtopic, schema, partition_key, payload)
+      event = Event.new(topic, subtopic, origin, schema, partition_key, payload)
       unless logger.post(topic, event.to_hash)
         raise MegaphoneUnavailableError.new(logger.last_error.message, event)
       end
