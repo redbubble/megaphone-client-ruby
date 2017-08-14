@@ -8,6 +8,12 @@ this project versions are for now mere release numbers. They don't have any part
 This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 
+## [0.2.0] - 2017-08-14
+
+### Changed
+
+- Signature of the `publish!` method: now takes a schema and a partition key as arguments
+
 ## [0.1.2] - 2017-08-04
 
 ### Fixed
