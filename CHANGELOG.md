@@ -8,6 +8,12 @@ this project versions are for now mere release numbers. They don't have any part
 This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 
+## [0.3.0] - 2017-08-17
+
+### Changed
+
+- Signature of the `Megaphone::Client` constructor : now takes a host and a port as optional arguments and doesn't take the logger as an argument anymore.
+
 ## [0.2.0] - 2017-08-14
 
 ### Changed
