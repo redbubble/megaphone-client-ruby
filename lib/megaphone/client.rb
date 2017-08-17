@@ -8,9 +8,10 @@ module Megaphone
     attr_reader :logger, :origin
     private :logger, :origin
 
-    def initialize(config, logger = Megaphone::Client::Logger.create)
-      @logger = logger
+    def initialize(config)
       @origin = config.fetch(:origin)
+      @logger = Megaphone::Client::Logger.create(config[:host],
+                                                 config[:port])
     end
 
     def publish!(topic, subtopic, schema, partition_key, payload)
