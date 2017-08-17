@@ -8,7 +8,7 @@ describe Megaphone::Client do
   describe '#publish!' do
     let(:config) { { origin: 'some-service' } }
     let(:client) do
-      described_class.new(config, logger)
+      described_class.new(config)
     end
 
     let(:topic) { :page_changes }
@@ -16,6 +16,10 @@ describe Megaphone::Client do
     let(:schema) { 'http://www.github.com/redbuble/megaphone-event-type-registry/topics/cats' }
     let(:payload) { { url: 'http://rb.com/' } }
     let(:partition_key) { 42 }
+
+    before do
+      allow(Megaphone::Client::Logger).to receive(:create).and_return(logger)
+    end
 
     context 'when fluentd logger is used' do
       let(:logger) { instance_double(Megaphone::Client::FluentLogger, post: true) }
