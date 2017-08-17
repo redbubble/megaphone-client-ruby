@@ -18,11 +18,11 @@ gem 'megaphone-client', '~> 0.2.0'
 
 Usage
 -----
-The client will append events to local files unless a `MEGAPHONE_FLUENT_HOST` and `MEGAPHONE_FLUENT_PORT` environment variables are set.
+The client will append events to local files unless the fluentd host and port values are passed as arguments to the client's constructor or the `MEGAPHONE_FLUENT_HOST` and `MEGAPHONE_FLUENT_PORT` environment variables are set.
 
 To publish an event on Megaphone
 ```ruby
-event_bus = Megaphone::Client.new({ origin: 'my-awesome-service' })
+event_bus = Megaphone::Client.new({ origin: 'my-awesome-service', host: 'localhost', port: '24224' })
 
 topic = :page_changes
 subtopic = :product_pages
