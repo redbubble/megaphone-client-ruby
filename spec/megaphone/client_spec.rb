@@ -5,16 +5,56 @@ describe Megaphone::Client do
     expect(Megaphone::Client::VERSION).not_to be nil
   end
 
+  describe '#initialize' do
+
+    let(:config) {{ origin: 'my-awesome-service' }}
+
+    it 'creates a logger', focus: true do
+      expect(Megaphone::Client::Logger).to receive(:create).with(nil, nil)
+      described_class.new(config)
+    end
+
+    context 'when MEGAPHONE_FLUENT_HOST or MEGAPHONE_FLUENT_PORT environment variables are set' do
+
+      before(:each) do
+        ENV['MEGAPHONE_FLUENT_HOST'] = 'env host'
+        ENV['MEGAPHONE_FLUENT_PORT'] = 'env port'
+      end
+
+      after do
+        ENV.delete('MEGAPHONE_FLUENT_HOST')
+        ENV.delete('MEGAPHONE_FLUENT_PORT')
+      end
+
+      it 'creates a logger using the value of the env. variables', focus: true do
+        expect(Megaphone::Client::Logger).to receive(:create).with('env host', 'env port')
+        described_class.new(config)
+      end
+    end
+
+    context "when custom values for 'host' and 'port' are provided as configuration" do
+
+      it 'the configured values take precedence over the env. variable values' do
+        expect(Megaphone::Client::Logger).to receive(:create).with('config host', 'config port')
+        described_class.new(config.merge({
+          host: 'config host',
+          port: 'config port'
+        }))
+      end
+    end
+  end
+
   describe '#publish!' do
+
     let(:config) { { origin: 'some-service' } }
     let(:client) do
       described_class.new(config)
     end
 
-    let(:topic) { :page_changes }
-    let(:subtopic) { :product_pages }
-    let(:schema) { 'http://www.github.com/redbuble/megaphone-event-type-registry/topics/cats' }
-    let(:payload) { { url: 'http://rb.com/' } }
+    let(:topic) { 'work-updates' }
+    let(:subtopic) { 'work-metadata-updated' }
+    let(:schema) { 'http://github.com/redbuble/megaphone-event-type-registry/streams/work-updates-1.0.0.json' }
+    let(:payload) { { url: 'http://example.rb.com/works/123456' } }
     let(:partition_key) { 42 }
 
     before do
@@ -63,10 +103,10 @@ describe Megaphone::Client do
 
     context 'when file logger is used' do
       let(:logger) { Megaphone::Client::FileLogger.new }
-      let(:expected_filename) { "page_changes.stream" }
+      let(:expected_filename) { "work-updates.stream" }
       let(:expected_file_permission) { "a" }
       let(:expected_file_content) do
-        "{\"meta\":{\"schema\":\"http://www.github.com/redbuble/megaphone-event-type-registry/topics/cats\",\"origin\":\"some-service\",\"topic\":\"page_changes\",\"subtopic\":\"product_pages\",\"partitionKey\":42},\"data\":{\"url\":\"http://rb.com/\"}}"
+        "{\"meta\":{\"schema\":\"#{schema}\",\"origin\":\"some-service\",\"topic\":\"work-updates\",\"subtopic\":\"work-metadata-updated\",\"partitionKey\":42},\"data\":{\"url\":\"http://example.rb.com/works/123456\"}}"
       end
 
       it 'sends the event to a file' do
