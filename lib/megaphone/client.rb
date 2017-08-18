@@ -10,8 +10,9 @@ module Megaphone
 
     def initialize(config)
       @origin = config.fetch(:origin)
-      @logger = Megaphone::Client::Logger.create(config[:host],
-                                                 config[:port])
+      host = config.fetch(:host, ENV['MEGAPHONE_FLUENT_HOST'])
+      port = config.fetch(:port, ENV['MEGAPHONE_FLUENT_PORT'])
+      @logger = Megaphone::Client::Logger.create(host, port)
     end
 
     def publish!(topic, subtopic, schema, partition_key, payload)
