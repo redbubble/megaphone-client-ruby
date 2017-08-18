@@ -14,7 +14,7 @@ Add the gem to your `Gemfile`:
 ```ruby
 # Gemfile
 
-gem 'megaphone-client', '~> 0.3.0'
+gem 'megaphone-client', '~> 1.0' # see semver.org
 ```
 
 Usage

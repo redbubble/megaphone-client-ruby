@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    megaphone-client (0.3.0)
+    megaphone-client (1.0.0)
       fluent-logger (~> 0.7.0)
 
 GEM
