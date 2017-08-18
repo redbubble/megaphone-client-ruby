@@ -18,19 +18,40 @@ gem 'megaphone-client', '~> 0.3.0'
 
 Usage
 -----
-The client will append events to local files unless the fluentd host and port values are passed as arguments to the client's constructor or the `MEGAPHONE_FLUENT_HOST` and `MEGAPHONE_FLUENT_PORT` environment variables are set.
 
-To publish an event on Megaphone
+In order to be as unobstrusive as possible, this client will append events to local files (e.g. `./work-updates.stream`) unless:
+
+- the `MEGAPHONE_FLUENT_HOST` and `MEGAPHONE_FLUENT_PORT` environment variables are set.
+- **or** the Fluentd host and port values are passed as arguments to the client's constructor
+
+That behaviour ensures that unless you want to send events to the Megaphone [streams][stream], you do not need to [start Fluentd][megaphone-fluentd] at all.
+
+  [stream]: https://github.com/redbubble/com/megaphone#stream
+  [megaphone-fluentd]: https://github.com/redbubble/megaphone-fluentd-container
+
+### Publishing events
+
+1. Start Fluentd, the easiest way to do so is using a [`redbubble/megaphone-fluentd`][megaphone-fluentd] container
+
+1. Create your event and publish it:
+
 ```ruby
-event_bus = Megaphone::Client.new({ origin: 'my-awesome-service', host: 'localhost', port: '24224' })
+# Configure a Megaphone client for your awesome service
+client = Megaphone::Client.new({
+  origin: 'my-awesome-service',
+  host: 'localhost',
+  port: '24224'
+})
 
-topic = :page_changes
-subtopic = :product_pages
-schema = 'http://www.github.com/redbuble/megaphone-event-type-registry/topics/cats'
-partition_key = '1357924680'
-payload = { url: 'https://www.redbubble.com/people/wytrab8/works/26039653-toadally-rad?grid_pos=1&p=mens-graphic-t-shirt&rbs=29c497ad-a976-42b8-aa40-0e218903c558&ref=shop_grid&style=mens' }
+# Create an event
+topic = 'work-updates'
+subtopic = 'work-metadata-updated'
+schema = 'https://github.com/redbubble/megaphone-event-type-registry/blob/master/streams/work-updates-schema-1.0.0.json'
+partition_key = '1357924680' # the Work ID in this case
+payload = { url: 'https://www.redbubble.com/people/wytrab8/works/26039653-toadally-rad' }
 
-event_bus.publish!(topic, subtopic, schema, partition_key, payload)
+# Publish your event
+client.publish!(topic, subtopic, schema, partition_key, payload)
 ```
 
 Credits
