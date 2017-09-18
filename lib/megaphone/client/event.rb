@@ -14,13 +14,11 @@ module Megaphone
 
       def to_hash
         {
-          meta: {
-            schema: @schema,
-            origin: @origin,
-            topic: @topic,
-            subtopic: @subtopic,
-            partitionKey: @partition_key
-          },
+          schema: @schema,
+          origin: @origin,
+          topic: @topic,
+          subtopic: @subtopic,
+          partitionKey: @partition_key,
           data: @payload
         }
       end

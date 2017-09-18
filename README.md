@@ -3,8 +3,9 @@ Megaphone::Client
 
 [![Build Status](https://badge.buildkite.com/9f4fdb370f5f295ee6bf3d68937b1be2d7cf9bf65b2c7b4213.svg?branch=master)](https://buildkite.com/redbubble/megaphone-client-ruby)
 [![Gem Version](https://badge.fury.io/rb/megaphone-client.svg)](https://badge.fury.io/rb/megaphone-client)
+![Megaphone](https://img.shields.io/badge/Megaphone-2.0.0-blue.svg)
 
-Send events to Megaphone.
+Send events to [Megaphone](https://github.com/redbubble/Megaphone).
 
 Getting Started
 ---------------
@@ -27,7 +28,7 @@ In order to be as unobstrusive as possible, this client will append events to lo
 
 That behaviour ensures that unless you want to send events to the Megaphone [streams][stream], you do not need to [start Fluentd][megaphone-fluentd] at all.
 
-  [stream]: https://github.com/redbubble/com/megaphone#stream
+  [stream]: https://github.com/redbubble/megaphone#stream
   [megaphone-fluentd]: https://github.com/redbubble/megaphone-fluentd-container
 
 ### Publishing events
