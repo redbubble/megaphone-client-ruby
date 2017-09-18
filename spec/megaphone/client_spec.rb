@@ -66,13 +66,11 @@ describe Megaphone::Client do
 
       it 'sends the event to fluentd' do
         expect(logger).to receive(:post).with(topic, {
-          meta: {
-            schema: schema,
-            topic: topic,
-            subtopic: subtopic,
-            origin: 'some-service',
-            partitionKey: partition_key
-          },
+          schema: schema,
+          topic: topic,
+          subtopic: subtopic,
+          origin: 'some-service',
+          partitionKey: partition_key,
           data: payload
         })
         client.publish!(topic, subtopic, schema, partition_key, payload)
@@ -83,7 +81,7 @@ describe Megaphone::Client do
         let(:config) { { origin: 'my-awesome-service' } }
 
         it 'sends the event to fluentd with the origin as my awesome service' do
-          expect(logger).to receive(:post).with(topic, hash_including(meta: hash_including(origin: 'my-awesome-service')))
+          expect(logger).to receive(:post).with(topic, hash_including(origin: 'my-awesome-service'))
           client.publish!(topic, subtopic, schema, partition_key, payload)
         end
       end
@@ -106,7 +104,7 @@ describe Megaphone::Client do
       let(:expected_filename) { "work-updates.stream" }
       let(:expected_file_permission) { "a" }
       let(:expected_file_content) do
-        "{\"meta\":{\"schema\":\"#{schema}\",\"origin\":\"some-service\",\"topic\":\"work-updates\",\"subtopic\":\"work-metadata-updated\",\"partitionKey\":42},\"data\":{\"url\":\"http://example.rb.com/works/123456\"}}"
+        "{\"schema\":\"#{schema}\",\"origin\":\"some-service\",\"topic\":\"work-updates\",\"subtopic\":\"work-metadata-updated\",\"partitionKey\":42,\"data\":{\"url\":\"http://example.rb.com/works/123456\"}}"
       end
 
       it 'sends the event to a file' do
