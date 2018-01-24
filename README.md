@@ -56,6 +56,89 @@ payload = { url: 'https://www.redbubble.com/people/wytrab8/works/26039653-toadal
 client.publish!(topic, subtopic, schema, partition_key, payload)
 ```
 
+Error Handling
+--------------
+
+## Exceptions the client will raise
+
+publish!() raises MegaphoneUnavailableError if the underlying Fluentd
+client library throws an error -- which may be for reasons such as:
+- fluentd daemon is not available
+- fluentd daemon restarted and TCP connection is stale (ECONNRESET)
+- presumably other reasons as well
+
+## Internal buffering upon error
+
+Note that the client library will buffer failed messages, in some cases,
+and attempt to resend them later. It will resend buffered messages in
+the following cases:
+- another message is sent
+- the `close` method is called
+- at exit (via an `at_exit` handler)
+
+Applications that require fast handling of events should read the section
+below on handling time-sensitive events and errors.
+
+Because of this buffering, users of the library should not treat exceptions
+as a definite reason to resend a message, as this may result in multiple
+messages being eventually dispatched. However without in-depth knowledge
+it can be hard to tell which exceptions are recoverable, and which indicate
+some kind of catastrophic failure.
+
+This author has confirmed that both connection failure and ECONNRESET
+errors will result in buffering of messages.
+
+If the internal buffer fills up, the buffer overflow handler will be called.
+
+At exit, or when client.close is called, the buffer will be flushed.
+If it cannot be flushed to the daemon, then the buffer overflow
+handler will be called.
+
+## Buffer overflow callback handler
+
+Passing a lambda to the `:overflow_handler` will enable your application
+to receive notifications of messages being lost. They can be lost in at
+least two ways:
+- fluentd daemon has gone away, and internal client-side buffer exceeded
+- process is shutting down, and fluent client library was unable to flush buffers
+  to the daemon.
+
+Production applications MUST handle this case, and raise an alert, if their
+messages are considered important. Applications who do not care about this
+edge case can pass an empty lambda in order to silence the warning.
+
+```ruby
+# Example usage:
+my_handler = -> (*) {
+  Rollbar.error("Megaphone/fluent messages lost due to buffer overflow")
+}
+
+logger = Megaphone::Client.new({
+  origin: "my-app",
+  overflow_handler: my_handler
+})
+
+begin
+  logger.publish!(... event ...)
+rescue Megaphone::Client::MegaphoneUnavailableError => e
+  Rollbar.warning("Megaphone client error", e)
+end
+
+```
+
+### Handling time-sensitive events and errors
+
+As long as an application is either short lived, or frequently sending messages,
+then it will probably be fine with the usual behaviour, which is to flush
+buffers at next send, or flush at exit.
+
+Applications with time-sensitive, infrequent events, will need to find a
+different strategy if errors have been raised during previous message publishing.
+
+Unfortunately there is no means to do this with the underlying Ruby client
+for fluentd. It would require patches to the upstream code to expose a flush
+method.
+
 Credits
 -------
 

@@ -31,10 +31,6 @@ module Megaphone
       end
     end
 
-    def flush
-      logger.flush
-    end
-
     def close
       logger.close
     end

@@ -6,7 +6,7 @@ module Megaphone
     class FluentLogger
       extend Forwardable
 
-      def_delegators :@logger, :post, :last_error, :flush, :close
+      def_delegators :@logger, :post, :last_error, :close
 
       def initialize(host, port, overflow_handler = nil)
         overflow_handler ||= default_overflow_handler
