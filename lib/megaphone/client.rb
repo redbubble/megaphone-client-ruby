@@ -23,7 +23,7 @@ module Megaphone
     def publish!(topic, subtopic, schema, partition_key, payload)
       event = Event.new(topic, subtopic, origin, schema, partition_key, payload)
       unless logger.post(topic, event.to_hash)
-        if logger.last_error.message.include?("Connection reset by peer")
+        if transient_error?(logger.last_error)
           raise MegaphoneMessageDelayWarning.new(logger.last_error.message, event)
         else
           raise MegaphoneUnavailableError.new(logger.last_error.message, event)
@@ -34,5 +34,19 @@ module Megaphone
     def close
       logger.close
     end
+
+    private
+
+    def transient_error?(err)
+      err_msg = err.message
+      if err_msg.include?("Connection reset by peer")
+        true
+      elsif err_msg.include?("Broken pipe")
+        true
+      else
+        false
+      end
+    end
+
   end
 end
