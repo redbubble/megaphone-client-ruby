@@ -128,6 +128,8 @@ begin
   logger.publish!(... event ...)
 rescue Megaphone::Client::MegaphoneUnavailableError => e
   Rollbar.warning("Megaphone client error", e)
+rescue Megaphone::Client::MegaphoneMessageDelayWarning => e
+  Rollbar.info("Megaphone transient message delay", e)
 end
 
 ```
