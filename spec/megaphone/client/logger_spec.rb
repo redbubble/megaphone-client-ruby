@@ -26,13 +26,25 @@ describe Megaphone::Client::Logger do
       end
 
       context "when both a custom 'host' and 'port' parameters are provided" do
-        it 'creates a fluent logger using them' do
-          expect(Megaphone::Client::FluentLogger).to receive(:new).with('custom host', '424242').and_call_original
+        it 'creates a fluent logger using them with a default overflow handler' do
+          # Should create default overflow handler
+          expect(Megaphone::Client::FluentLogger).to receive(:new).with('custom host', '424242', nil).and_call_original
 
           client = Megaphone::Client::Logger.create('custom host', '424242')
           expect(client).to be_an_instance_of(Megaphone::Client::FluentLogger)
         end
       end
+
+      context "when host, port and overflow parameters are provided" do
+        it 'creates a fluent logger using them' do
+          overflow_handler = -> (*) { }
+          expect(Megaphone::Client::FluentLogger).to receive(:new).with('somehost', '2424', overflow_handler).and_call_original
+
+          client = Megaphone::Client::Logger.create('somehost', '2424', overflow_handler)
+          expect(client).to be_an_instance_of(Megaphone::Client::FluentLogger)
+        end
+      end
+
     end
   end
 end

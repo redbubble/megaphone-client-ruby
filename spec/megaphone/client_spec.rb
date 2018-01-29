@@ -10,7 +10,7 @@ describe Megaphone::Client do
     let(:config) {{ origin: 'my-awesome-service' }}
 
     it 'creates a logger', focus: true do
-      expect(Megaphone::Client::Logger).to receive(:create).with(nil, nil)
+      expect(Megaphone::Client::Logger).to receive(:create).with(nil, nil, nil)
       described_class.new(config)
     end
 
@@ -27,7 +27,7 @@ describe Megaphone::Client do
       end
 
       it 'creates a logger using the value of the env. variables', focus: true do
-        expect(Megaphone::Client::Logger).to receive(:create).with('env host', 'env port')
+        expect(Megaphone::Client::Logger).to receive(:create).with('env host', 'env port', nil)
         described_class.new(config)
       end
     end
@@ -35,7 +35,7 @@ describe Megaphone::Client do
     context "when custom values for 'host' and 'port' are provided as configuration" do
 
       it 'the configured values take precedence over the env. variable values' do
-        expect(Megaphone::Client::Logger).to receive(:create).with('config host', 'config port')
+        expect(Megaphone::Client::Logger).to receive(:create).with('config host', 'config port', nil)
         described_class.new(config.merge({
           host: 'config host',
           port: 'config port'
@@ -116,4 +116,38 @@ describe Megaphone::Client do
       end
     end
   end
+
+  describe '#overflow_handler' do
+    let(:topic) { 'work-updates' }
+    let(:subtopic) { 'work-metadata-updated' }
+    let(:schema) { 'http://github.com/redbuble/megaphone-event-type-registry/streams/work-updates-1.0.0.json' }
+    let(:payload) { { url: 'http://example.rb.com/works/123456' } }
+    let(:partition_key) { 42 }
+
+    context 'when overflow_handler was configured' do
+      handler_called = 0
+      handler = -> (*) {
+        handler_called = 1
+      }
+
+      my_config = {
+        origin: "some-service",
+        overflow_handler: handler,
+        host: "localhost",
+        port: "60666",
+      }
+
+      it 'calls the overflow handler on close if messages did not send' do
+        client = described_class.new(my_config)
+        begin
+          client.publish!(topic, subtopic, schema, partition_key, payload)
+        rescue Megaphone::Client::MegaphoneUnavailableError => e
+          puts("ignoring MegaphoneUnavailableError")
+        end
+        client.close
+        expect(handler_called).to eql(1)
+      end
+    end
+  end
+
 end
