@@ -61,11 +61,17 @@ Error Handling
 
 ## Exceptions the client will raise
 
-publish!() raises MegaphoneUnavailableError if the underlying Fluentd
-client library throws an error -- which may be for reasons such as:
-- fluentd daemon is not available
-- fluentd daemon restarted and TCP connection is stale (ECONNRESET)
-- presumably other reasons as well
+publish!() can raise two exceptions if the underlying Fluentd
+client library throws an error.
+
+The most common is `MegaphoneMessageDelayWarning` which indicates
+a transient failure occured, but the message will probably be resent
+later. See section on _Internal buffering_ below for more details.
+
+The second exception is `MegaphoneUnavailableError`, which is thrown
+for all other errors. Note that these _may or may not_ also buffer
+the message for later transmission. Unfortunately the underlying
+client library does not make the distinction.
 
 ## Internal buffering upon error
 
