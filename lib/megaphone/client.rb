@@ -18,7 +18,11 @@ module Megaphone
     def publish!(topic, subtopic, schema, partition_key, payload)
       event = Event.new(topic, subtopic, origin, schema, partition_key, payload)
       unless logger.post(topic, event.to_hash)
-        raise MegaphoneUnavailableError.new(logger.last_error.message, event)
+        if logger.last_error.message.include?("Connection reset by peer")
+          raise MegaphoneMessageDelayWarning.new(logger.last_error.message, event)
+        else
+          raise MegaphoneUnavailableError.new(logger.last_error.message, event)
+        end
       end
     end
   end
