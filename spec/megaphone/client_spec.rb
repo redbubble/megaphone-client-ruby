@@ -94,7 +94,7 @@ describe Megaphone::Client do
         end
 
         it 'raises an error' do
-          expect { client.publish!(topic, subtopic, schema, partition_key, payload) }.to raise_error(Megaphone::Client::MegaphoneUnavailableError, /The following event was not published/)
+          expect { client.publish!(topic, subtopic, schema, partition_key, payload) }.to raise_error(Megaphone::Client::MegaphoneUnavailableError, /An event could not be immediately published/)
         end
       end
     end
