@@ -12,6 +12,10 @@ module Megaphone
         @payload = payload
       end
 
+      def stream_id
+        "#{@topic}.#{@subtopic}"
+      end
+
       def to_hash
         {
           schema: @schema,
