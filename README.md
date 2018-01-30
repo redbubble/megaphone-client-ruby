@@ -4,7 +4,11 @@
 [![Gem Version](https://badge.fury.io/rb/megaphone-client.svg)](https://badge.fury.io/rb/megaphone-client)
 ![Megaphone](https://img.shields.io/badge/Megaphone-2.0.0-blue.svg)
 
-Send events to [Megaphone](https://github.com/redbubble/Megaphone).
+Send events to [Megaphone (private)](https://github.com/redbubble/Megaphone).
+
+> **DISCLAIMER**: This is part of a currently private event broadcasting system called Megaphone. Please be aware that some links may lead to private repositories. Questions are welcome, though, and we're happy to help if you find a use for this gem, or get inspired by it!
+>
+> More of Megaphone could become public in the future, but there is currently no clear roadmap for it. -- [GB](https://github.com/gonzalo-bulnes)
 
 ## Getting Started
 
