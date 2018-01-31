@@ -1,6 +1,5 @@
 # Megaphone::Client
 
-[![Build Status](https://badge.buildkite.com/9f4fdb370f5f295ee6bf3d68937b1be2d7cf9bf65b2c7b4213.svg?branch=master)](https://buildkite.com/redbubble/megaphone-client-ruby)
 [![Build Status](https://travis-ci.org/redbubble/megaphone-client-ruby.svg?branch=master)](https://travis-ci.org/redbubble/megaphone-client-ruby)
 [![Gem Version](https://badge.fury.io/rb/megaphone-client.svg)](https://badge.fury.io/rb/megaphone-client)
 ![Megaphone](https://img.shields.io/badge/Megaphone-2.0.0-blue.svg)
