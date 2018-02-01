@@ -1,14 +1,28 @@
 # Megaphone::Client
 
-[![Build Status](https://badge.buildkite.com/9f4fdb370f5f295ee6bf3d68937b1be2d7cf9bf65b2c7b4213.svg?branch=master)](https://buildkite.com/redbubble/megaphone-client-ruby)
+[![Build Status](https://travis-ci.org/redbubble/megaphone-client-ruby.svg?branch=master)](https://travis-ci.org/redbubble/megaphone-client-ruby)
 [![Gem Version](https://badge.fury.io/rb/megaphone-client.svg)](https://badge.fury.io/rb/megaphone-client)
 ![Megaphone](https://img.shields.io/badge/Megaphone-2.0.0-blue.svg)
+![This is the reference implementation fro Megaphone clients.](https://img.shields.io/badge/megaphone--client-reference%20implementation-blue.svg)
 
 Send events to [Megaphone (private)](https://github.com/redbubble/Megaphone).
 
 > **DISCLAIMER**: This is part of a currently private event broadcasting system called Megaphone. Please be aware that some links may lead to private repositories. Questions are welcome, though, and we're happy to help if you find a use for this gem, or get inspired by it!
 >
 > More of Megaphone could become public in the future, but there is currently no clear roadmap for it. -- [GB](https://github.com/gonzalo-bulnes)
+
+## Table of contents
+
+1. [**Getting started**](#getting-started)
+1. [**Usage**](#usage)
+   1. [Publishing events](#publishing-events)
+1. [**Error handling**](#error-handling)
+   1. [Exceptions the client will raise](#exceptions-the-client-will-raise)
+   1. [Internal buffering upon error](#internal-buffering-upon-error)
+   1. [Buffer overflow callback handler](#buffer-overflow-callback-handler)
+   1. [Handling time-sensitive events and errors](#handling-time-sensitive-events-and-errors)
+1. [**Development**](#development)
+   1. [Testing](#testing)
 
 ## Getting Started
 
@@ -152,6 +166,18 @@ different strategy if errors have been raised during previous message publishing
 Unfortunately there is no means to do this with the underlying Ruby client
 for Fluentd. It would require patches to the upstream code to expose a flush
 method.
+
+## Development
+
+### Testing
+
+```bash
+# Run the entire test suite
+rake
+
+# Otherwise...
+rake spec
+```
 
 ## Credits
 
