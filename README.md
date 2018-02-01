@@ -10,6 +10,19 @@ Send events to [Megaphone (private)](https://github.com/redbubble/Megaphone).
 >
 > More of Megaphone could become public in the future, but there is currently no clear roadmap for it. -- [GB](https://github.com/gonzalo-bulnes)
 
+## Table of contents
+
+1. [**Getting started**](#getting-started)
+1. [**Usage**](#usage)
+   1. [Publishing events](#publishing-events)
+1. [**Error handling**](#error-handling)
+   1. [Exceptions the client will raise](#exceptions-the-client-will-raise)
+   1. [Internal buffering upon error](#internal-buffering-upon-error)
+   1. [Buffer overflow callback handler](#buffer-overflow-callback-handler)
+   1. [Handling time-sensitive events and errors](#handling-time-sensitive-events-and-errors)
+1. [**Development**](#development)
+   1. [Testing](#testing)
+
 ## Getting Started
 
 Add the gem to your `Gemfile`:
