@@ -167,17 +167,12 @@ Unfortunately there is no means to do this with the underlying Ruby client
 for Fluentd. It would require patches to the upstream code to expose a flush
 method.
 
-## Development
+## Contributing
 
-### Testing
+Want to contribute? Amazing! Our [contributing guidelines][contributing], and [code of conduct][coc] are here to get you started and make you feel welcome!
 
-```bash
-# Run the entire test suite
-rake
-
-# Otherwise...
-rake spec
-```
+[coc]: ./CODE_OF_CONDUCT.md
+[contributing]: ./CONTRIBUTING.md
 
 ## Credits
 
