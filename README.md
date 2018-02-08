@@ -79,17 +79,23 @@ client.publish!(topic, subtopic, schema, partition_key, payload)
 
 ### Exceptions the client will raise
 
-`publish!` can raise two exceptions if the underlying Fluentd
-client library throws an error.
+#### `MegaphoneInvalidEventError`
 
-The most common is `MegaphoneMessageDelayWarning` which indicates
-a transient failure occurred, but the message will probably be resent
-later. See section on _[Internal buffering](#internal-buffering-upon-error)_ below for more details.
+Raised when the message is invalid by Kinesis's standards.
 
-The second exception is `MegaphoneUnavailableError`, which is thrown
-for all other errors. Note that these _may or may not_ also buffer
-the message for later transmission. Unfortunately the underlying
-client library does not make the distinction.
+#### `MegaphoneMessageDelayWarning`
+
+This indicates a transient failure occurred, but the message will
+probably be re-sent later. See the section on
+_[Internal buffering](#internal-buffering-upon-error)_ below for more
+details.
+
+#### `MegaphoneUnavailableError`
+
+This is raised for all other errors. Note that
+these _may or may not_ also buffer the message for later
+transmission. Unfortunately the underlying client library does not
+make the distinction.
 
 ### Internal buffering upon error
 

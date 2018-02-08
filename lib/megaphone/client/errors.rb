@@ -25,5 +25,17 @@ module Megaphone
         "#{@msg} - Event delayed and will be reattempted: #{@event.stream_id}"
       end
     end
+
+    class MegaphoneInvalidEventError < StandardError
+
+      def initialize(msg)
+        super(msg)
+        @msg = msg
+      end
+
+      def to_s
+        "Invalid Megaphone event was not sent: #{@msg}"
+      end
+    end
   end
 end

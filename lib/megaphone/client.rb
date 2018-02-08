@@ -22,6 +22,7 @@ module Megaphone
 
     def publish!(topic, subtopic, schema, partition_key, payload)
       event = Event.new(topic, subtopic, origin, schema, partition_key, payload)
+      raise MegaphoneInvalidEventError.new(event.errors.join(', ')) unless event.valid?
       unless logger.post(topic, event.to_hash)
         if transient_error?(logger.last_error)
           raise MegaphoneMessageDelayWarning.new(logger.last_error.message, event)
