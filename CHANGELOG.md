@@ -11,6 +11,10 @@ this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 
 * A [code of conduct][coc] and [contributing guidelines][contributing].
 
+### Fixed
+
+* Validation of events to ensure that Kinesis will accept them.
+
   [coc]: ./CODE_OF_CONDUCT.md
   [contributing]: ./CONTRIBUTING.md
 
