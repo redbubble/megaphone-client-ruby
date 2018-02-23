@@ -10,7 +10,7 @@ describe Megaphone::Client do
     let(:config) {{ origin: 'my-awesome-service' }}
 
     it 'creates a logger', focus: true do
-      expect(Megaphone::Client::Logger).to receive(:create).with(nil, nil, nil)
+      expect(Megaphone::Client::Logger).to receive(:create).with(nil, Megaphone::Client::FLUENT_DEFAULT_PORT, nil)
       described_class.new(config)
     end
 
