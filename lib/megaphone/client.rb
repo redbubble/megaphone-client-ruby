@@ -8,6 +8,8 @@ module Megaphone
     attr_reader :logger, :origin
     private :logger, :origin
 
+    FLUENT_DEFAULT_PORT = 24224
+
     # Main entry point for apps using this library.
     # Will default to environment for host and port settings, if not passed.
     # Note that a missing callback_handler will result in a default handler
@@ -15,7 +17,7 @@ module Megaphone
     def initialize(config)
       @origin = config.fetch(:origin)
       host = config.fetch(:host, ENV['MEGAPHONE_FLUENT_HOST'])
-      port = config.fetch(:port, ENV['MEGAPHONE_FLUENT_PORT'])
+      port = config.fetch(:port, ENV['MEGAPHONE_FLUENT_PORT'] || FLUENT_DEFAULT_PORT)
       overflow_handler = config.fetch(:overflow_handler, nil)
       @logger = Megaphone::Client::Logger.create(host, port, overflow_handler)
     end
