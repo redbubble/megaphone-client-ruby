@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and
 this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+* Add options hash argument to `.publish!` with support for overriding the `origin` attribute
+
 ## [1.1.2] - 2018-03-05
 
 ### Changed
@@ -82,6 +88,8 @@ this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 
 * Initial implementation of the `Megaphone::Client.publish!` method
 
+  [Unreleased]: https://github.com/redbubble/megaphone-client-ruby/compare/v1.1.2...master
+  [1.1.2]: https://github.com/redbubble/megaphone-client-ruby/compare/v1.1.1...v1.1.2
   [1.1.1]: https://github.com/redbubble/megaphone-client-ruby/compare/v1.1.0...v1.1.1
   [1.1.0]: https://github.com/redbubble/megaphone-client-ruby/compare/v1.0.1...v1.1.0
   [1.0.1]: https://github.com/redbubble/megaphone-client-ruby/compare/v1.0.0...v1.0.1

@@ -76,13 +76,20 @@ describe Megaphone::Client do
         client.publish!(topic, subtopic, schema, partition_key, payload)
       end
 
-      context 'when sending event from My Awesome Service' do
+      context 'when client is initialized with origin "My Awesome Service"' do
 
         let(:config) { { origin: 'my-awesome-service' } }
 
         it 'sends the event to fluentd with the origin as my awesome service' do
           expect(logger).to receive(:post).with(topic, hash_including(origin: 'my-awesome-service'))
           client.publish!(topic, subtopic, schema, partition_key, payload)
+        end
+      end
+
+      context 'when origin is provided to .publish! in the options hash' do
+        it 'overrides the origin' do
+          expect(logger).to receive(:post).with(topic, hash_including(origin: 'myOrigin'))
+          client.publish!(topic, subtopic, schema, partition_key, payload, origin: 'myOrigin')
         end
       end
 
