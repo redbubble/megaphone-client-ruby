@@ -5,8 +5,8 @@ require 'megaphone/client/version'
 
 module Megaphone
   class Client
-    attr_reader :logger, :origin
-    private :logger, :origin
+    attr_reader :logger, :default_origin
+    private :logger, :default_origin
 
     FLUENT_DEFAULT_PORT = 24224
 
@@ -15,14 +15,16 @@ module Megaphone
     # Note that a missing callback_handler will result in a default handler
     # being assigned if the FluentLogger is used.
     def initialize(config)
-      @origin = config.fetch(:origin)
+      @default_origin = config.fetch(:origin)
       host = config.fetch(:host, ENV['MEGAPHONE_FLUENT_HOST'])
       port = config.fetch(:port, ENV['MEGAPHONE_FLUENT_PORT'] || FLUENT_DEFAULT_PORT)
       overflow_handler = config.fetch(:overflow_handler, nil)
       @logger = Megaphone::Client::Logger.create(host, port, overflow_handler)
     end
 
-    def publish!(topic, subtopic, schema, partition_key, payload)
+    def publish!(topic, subtopic, schema, partition_key, payload, options = {})
+      origin = options[:origin] || default_origin
+      raise MegaphoneMissingOriginError if origin.nil? || origin.empty?
       event = Event.new(topic, subtopic, origin, schema, partition_key, payload)
       raise MegaphoneInvalidEventError.new(event.errors.join(', ')) unless event.valid?
       unless logger.post(topic, event.to_hash)

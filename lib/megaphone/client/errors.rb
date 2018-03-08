@@ -18,7 +18,13 @@ module Megaphone
 
       def initialize(msg)
         super("Invalid Megaphone event was not sent: #{msg}")
-        @msg = msg
+      end
+    end
+
+    class MegaphoneMissingOriginError < StandardError
+
+      def initialize
+        super("Megaphone messages must have an origin. Ensure you provide an origin option, or have initialized the client with a default.")
       end
     end
   end

@@ -70,6 +70,9 @@ payload = { url: 'https://www.redbubble.com/people/wytrab8/works/26039653-toadal
 # Publish your event
 client.publish!(topic, subtopic, schema, partition_key, payload)
 
+# You can optionally provide an options hash, that can be used to override the origin attribute:
+client.publish!(topic, subtopic, schema, partition_key, payload, origin: 'a-different-service')
+
 # Note: the client will close the connection to Fluentd on exit, if you need to do it before that (unlikely), you can use Megaphone::Client#close method.
 
 # See below for error handling instructions and examples.
