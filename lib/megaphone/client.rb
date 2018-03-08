@@ -24,6 +24,7 @@ module Megaphone
 
     def publish!(topic, subtopic, schema, partition_key, payload, options = {})
       origin = options[:origin] || default_origin
+      raise MegaphoneMissingOriginError if origin.nil? || origin.empty?
       event = Event.new(topic, subtopic, origin, schema, partition_key, payload)
       raise MegaphoneInvalidEventError.new(event.errors.join(', ')) unless event.valid?
       unless logger.post(topic, event.to_hash)

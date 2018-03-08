@@ -87,9 +87,22 @@ describe Megaphone::Client do
       end
 
       context 'when origin is provided to .publish! in the options hash' do
+
         it 'overrides the origin' do
           expect(logger).to receive(:post).with(topic, hash_including(origin: 'myOrigin'))
           client.publish!(topic, subtopic, schema, partition_key, payload, origin: 'myOrigin')
+        end
+      end
+
+      context 'when origin is missing' do
+        let(:config) { { origin: nil } }
+
+        it 'raises an error' do
+          expect { client.publish!(topic, subtopic, schema, partition_key, payload, origin: '') }.to raise_error(Megaphone::Client::MegaphoneMissingOriginError)
+        end
+
+        it 'raises an error' do
+          expect { client.publish!(topic, subtopic, schema, partition_key, payload, origin: nil) }.to raise_error(Megaphone::Client::MegaphoneMissingOriginError)
         end
       end
 

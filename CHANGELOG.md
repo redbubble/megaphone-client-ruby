@@ -9,7 +9,8 @@ this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 
 ### Added
 
-* Add options hash argument to `.publish!` with support for overriding the `origin` attribute
+* Add options hash argument to `.publish!` with support for overriding the `origin` attribute.
+* Add validation of origin in `.publish!` - `MegaphoneMissingOriginError` will be raised if missing.
 
 ## [1.1.2] - 2018-03-05
 
