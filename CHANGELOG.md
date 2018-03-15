@@ -10,7 +10,10 @@ this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 ### Changed
 
 * Signature of `Client#publish!`: now take two hash arguments: `payload` & `metadata`. Previously __required__ arguments (e.g., `partition_key`) are now __required__ attributes of the `metadata` hash.
-* New __required__ event attribute `transactionId`.
+
+### Added
+
+* Support for new event metadata attribute `transactionId`. This is a 'required' attribute, however one will be automatically generated if it is not provided.
 
 ## [1.1.2] - 2018-03-05
 
