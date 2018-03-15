@@ -8,7 +8,7 @@ module Megaphone
     attr_reader :logger, :origin
     private :logger, :origin
 
-    FLUENT_DEFAULT_PORT = 24224
+    FLUENT_DEFAULT_PORT = '24224'
 
     # Main entry point for apps using this library.
     # Will default to environment for host and port settings, if not passed.
