@@ -92,4 +92,22 @@ describe Megaphone::Client::Event do
       it { is_expected.to be false }
     end
   end
+
+  describe '#validate!' do
+    let(:subject) { event }
+
+    context 'when a required attribute is missing' do
+      let(:origin) { nil }
+
+      it 'raises an error if the event is not valid' do
+        expect { subject.validate! }.to raise_error(Megaphone::Client::MegaphoneInvalidEventError, /origin must not be empty/)
+      end
+    end
+
+    context 'when event is valid' do
+      it 'does not raise' do
+        expect { subject.validate! }.not_to raise_error
+      end
+    end
+  end
 end
