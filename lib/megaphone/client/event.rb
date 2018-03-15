@@ -1,4 +1,5 @@
 require 'json'
+require 'securerandom'
 
 module Megaphone
   class Client
@@ -11,7 +12,7 @@ module Megaphone
         @origin = metadata[:origin]
         @schema = metadata[:schema]
         @partition_key = metadata[:partition_key]
-        @transaction_id = metadata[:transaction_id]
+        @transaction_id = metadata[:transaction_id] || generate_transaction_id
         @payload = payload
       end
 
@@ -57,6 +58,10 @@ module Megaphone
 
       def missing?(field)
         not (field && field.to_s.length > 0)
+      end
+
+      def generate_transaction_id
+        SecureRandom.uuid
       end
     end
   end

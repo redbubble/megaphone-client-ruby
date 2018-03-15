@@ -20,6 +20,24 @@ describe Megaphone::Client::Event do
   end
   let(:event) { Megaphone::Client::Event.new(payload, metadata) }
 
+  describe '#initialize' do
+    context 'when a transaction_id is not provided' do
+      let(:transaction_id) { nil }
+
+      it 'generates a new transaction_id' do
+        expect(event.to_hash[:transactionId]).not_to be_empty
+      end
+    end
+
+    context 'when given a transaction_id' do
+      let(:transaction_id) { 'my-transaction_id' }
+
+      it 'uses the provided transaction_id' do
+        expect(event.to_hash[:transactionId]).to eq('my-transaction_id')
+      end
+    end
+  end
+
   describe '#errors' do
     let(:subject) { event.errors }
 
@@ -48,11 +66,6 @@ describe Megaphone::Client::Event do
     context 'when the origin is missing' do
       let(:origin) { nil }
       it { is_expected.to include('origin must not be empty') }
-    end
-
-    context 'when the transaction id is missing' do
-      let(:transaction_id) { nil }
-      it { is_expected.to include('transaction_id must not be empty') }
     end
 
     context 'when more than one field is missing' do

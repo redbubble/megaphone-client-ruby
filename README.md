@@ -78,6 +78,8 @@ client.publish!(payload, metadata)
 
 # Note: the client will close the connection to Fluentd on exit, if you need to do it before that (unlikely), you can use Megaphone::Client#close method.
 
+# If you do not provide a transaction_id metadata attribute, a random (v4) UUID will be generated and used automatically.
+
 # See below for error handling instructions and examples.
 ```
 
