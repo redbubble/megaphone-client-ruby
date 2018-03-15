@@ -60,15 +60,21 @@ client = Megaphone::Client.new({
   port: '24224'
 })
 
-# Create an event
-topic = 'work-updates'
-subtopic = 'work-metadata-updated'
-schema = 'https://github.com/redbubble/megaphone-event-type-registry/blob/master/streams/work-updates-schema-1.0.0.json'
-partition_key = '1357924680' # the Work ID in this case
-payload = { url: 'https://www.redbubble.com/people/wytrab8/works/26039653-toadally-rad' }
+# Prepare an event payload and associated metadata
+payload = {
+  url: 'https://www.redbubble.com/people/wytrab8/works/26039653-toadally-rad'
+}
+
+metadata = {
+  topic: 'work-updates',
+  subtopic: 'work-metadata-updated',
+  schema: 'https://github.com/redbubble/megaphone-event-type-registry/blob/master/streams/work-updates-schema-1.0.0.json',
+  partition_key: '1357924680', # the Work ID in this case
+  transaction_id: 'transaction-id', # a unique identifier for this action
+}
 
 # Publish your event
-client.publish!(topic, subtopic, schema, partition_key, payload)
+client.publish!(payload, metadata)
 
 # Note: the client will close the connection to Fluentd on exit, if you need to do it before that (unlikely), you can use Megaphone::Client#close method.
 
