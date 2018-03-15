@@ -5,9 +5,6 @@ require 'megaphone/client/version'
 
 module Megaphone
   class Client
-    attr_reader :logger, :origin
-    private :logger, :origin
-
     FLUENT_DEFAULT_PORT = '24224'
 
     # Main entry point for apps using this library.
@@ -22,10 +19,11 @@ module Megaphone
       @logger = Megaphone::Client::Logger.create(host, port, overflow_handler)
     end
 
-    def publish!(topic, subtopic, schema, partition_key, payload)
-      event = Event.new(topic, subtopic, origin, schema, partition_key, payload)
-      raise MegaphoneInvalidEventError.new(event.errors.join(', ')) unless event.valid?
-      unless logger.post(topic, event.to_hash)
+    def publish!(payload, metadata = {})
+      metadata = default_metadata.merge(metadata)
+      event = Event.new(payload, metadata)
+      event.validate!
+      unless logger.post(metadata[:topic], event.to_hash)
         if transient_error?(logger.last_error)
           raise MegaphoneMessageDelayWarning.new(logger.last_error.message, event.stream_id)
         else
@@ -39,6 +37,14 @@ module Megaphone
     end
 
     private
+
+    attr_reader :logger, :origin
+
+    def default_metadata
+      {
+        origin: origin,
+      }
+    end
 
     def transient_error?(err)
       err_msg = err.message
