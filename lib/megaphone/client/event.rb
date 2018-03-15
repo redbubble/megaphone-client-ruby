@@ -1,14 +1,18 @@
 require 'json'
+require 'securerandom'
 
 module Megaphone
   class Client
     class Event
-      def initialize(topic, subtopic, origin, schema, partition_key, payload)
-        @topic = topic
-        @subtopic = subtopic
-        @origin = origin
-        @schema = schema
-        @partition_key = partition_key
+      REQUIRED_ATTRIBUTES = [:partition_key, :topic, :subtopic, :payload, :origin, :transaction_id]
+
+      def initialize(payload, metadata = {})
+        @topic = metadata[:topic]
+        @subtopic = metadata[:subtopic]
+        @origin = metadata[:origin]
+        @schema = metadata[:schema]
+        @partition_key = metadata[:partition_key]
+        @transaction_id = metadata[:transaction_id] || generate_transaction_id
         @payload = payload
       end
 
@@ -23,7 +27,8 @@ module Megaphone
           topic: @topic,
           subtopic: @subtopic,
           partitionKey: @partition_key,
-          data: @payload
+          transactionId: @transaction_id,
+          data: @payload,
         }
       end
 
@@ -32,23 +37,31 @@ module Megaphone
       end
 
       def errors
-        errors = []
-        errors << 'partition_key must not be empty' if missing?(@partition_key)
-        errors << 'topic must not be empty' if missing?(@topic)
-        errors << 'subtopic must not be empty' if missing?(@subtopic)
-        errors << 'payload must not be empty' if missing?(@payload)
-        errors << 'origin must not be empty' if missing?(@origin)
-        errors
+        REQUIRED_ATTRIBUTES.reduce([]) do |errors, attr|
+          if missing?(instance_variable_get("@#{attr}"))
+            errors << "#{attr} must not be empty"
+          end
+
+          errors
+        end
       end
 
       def valid?
         errors.empty?
       end
 
+      def validate!
+        raise MegaphoneInvalidEventError.new(errors.join(', ')) unless valid?
+      end
+
       private
 
       def missing?(field)
         not (field && field.to_s.length > 0)
+      end
+
+      def generate_transaction_id
+        SecureRandom.uuid
       end
     end
   end

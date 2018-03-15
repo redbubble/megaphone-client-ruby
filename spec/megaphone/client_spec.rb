@@ -56,6 +56,16 @@ describe Megaphone::Client do
     let(:schema) { 'http://github.com/redbuble/megaphone-event-type-registry/streams/work-updates-1.0.0.json' }
     let(:payload) { { url: 'http://example.rb.com/works/123456' } }
     let(:partition_key) { 42 }
+    let(:transaction_id) { 'transaction-id' }
+    let(:metadata) do
+      {
+        topic: topic,
+        subtopic: subtopic,
+        schema: schema,
+        partition_key: partition_key,
+        transaction_id: transaction_id,
+      }
+    end
 
     before do
       allow(Megaphone::Client::Logger).to receive(:create).and_return(logger)
@@ -71,9 +81,10 @@ describe Megaphone::Client do
           subtopic: subtopic,
           origin: 'some-service',
           partitionKey: partition_key,
+          transactionId: transaction_id,
           data: payload
         })
-        client.publish!(topic, subtopic, schema, partition_key, payload)
+        client.publish!(payload, metadata)
       end
 
       context 'when sending event from My Awesome Service' do
@@ -82,7 +93,7 @@ describe Megaphone::Client do
 
         it 'sends the event to fluentd with the origin as my awesome service' do
           expect(logger).to receive(:post).with(topic, hash_including(origin: 'my-awesome-service'))
-          client.publish!(topic, subtopic, schema, partition_key, payload)
+          client.publish!(payload, metadata)
         end
       end
 
@@ -94,7 +105,7 @@ describe Megaphone::Client do
         end
 
         it 'raises an error' do
-          expect { client.publish!(topic, subtopic, schema, partition_key, payload) }.to raise_error(Megaphone::Client::MegaphoneUnavailableError, /An event could not be immediately published/)
+          expect { client.publish!(payload, metadata) }.to raise_error(Megaphone::Client::MegaphoneUnavailableError, /An event could not be immediately published/)
         end
       end
     end
@@ -104,7 +115,7 @@ describe Megaphone::Client do
       let(:expected_filename) { "work-updates.stream" }
       let(:expected_file_permission) { "a" }
       let(:expected_file_content) do
-        "{\"schema\":\"#{schema}\",\"origin\":\"some-service\",\"topic\":\"work-updates\",\"subtopic\":\"work-metadata-updated\",\"partitionKey\":42,\"data\":{\"url\":\"http://example.rb.com/works/123456\"}}"
+        "{\"schema\":\"#{schema}\",\"origin\":\"some-service\",\"topic\":\"work-updates\",\"subtopic\":\"work-metadata-updated\",\"partitionKey\":42,\"transactionId\":\"transaction-id\",\"data\":{\"url\":\"http://example.rb.com/works/123456\"}}"
       end
 
       it 'sends the event to a file' do
@@ -112,7 +123,7 @@ describe Megaphone::Client do
         expect(File).to receive(:open).with(expected_filename, expected_file_permission).and_yield(file)
         expect(file).to receive(:puts).with(expected_file_content)
 
-        client.publish!(topic, subtopic, schema, partition_key, payload)
+        client.publish!(payload, metadata)
       end
     end
   end
@@ -123,6 +134,16 @@ describe Megaphone::Client do
     let(:schema) { 'http://github.com/redbuble/megaphone-event-type-registry/streams/work-updates-1.0.0.json' }
     let(:payload) { { url: 'http://example.rb.com/works/123456' } }
     let(:partition_key) { 42 }
+    let(:transaction_id) { 'transaction-id' }
+    let(:metadata) do
+      {
+        topic: topic,
+        subtopic: subtopic,
+        schema: schema,
+        partition_key: partition_key,
+        transaction_id: transaction_id,
+      }
+    end
 
     context 'when overflow_handler was configured' do
       handler_called = 0
@@ -140,7 +161,7 @@ describe Megaphone::Client do
       it 'calls the overflow handler on close if messages did not send' do
         client = described_class.new(my_config)
         begin
-          client.publish!(topic, subtopic, schema, partition_key, payload)
+          client.publish!(payload, metadata)
         rescue Megaphone::Client::MegaphoneUnavailableError => e
           puts("ignoring MegaphoneUnavailableError")
         end
