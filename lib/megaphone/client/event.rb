@@ -3,7 +3,7 @@ require 'json'
 module Megaphone
   class Client
     class Event
-      REQUIRED_ATTRIBUTES = [:partition_key, :topic, :subtopic, :payload, :origin]
+      REQUIRED_ATTRIBUTES = [:partition_key, :topic, :subtopic, :payload, :origin, :transaction_id]
 
       def initialize(payload, metadata = {})
         @topic = metadata[:topic]
@@ -11,6 +11,7 @@ module Megaphone
         @origin = metadata[:origin]
         @schema = metadata[:schema]
         @partition_key = metadata[:partition_key]
+        @transaction_id = metadata[:transaction_id]
         @payload = payload
       end
 
@@ -25,6 +26,7 @@ module Megaphone
           topic: @topic,
           subtopic: @subtopic,
           partitionKey: @partition_key,
+          transactionId: @transaction_id,
           data: @payload,
         }
       end

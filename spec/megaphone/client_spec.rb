@@ -56,12 +56,14 @@ describe Megaphone::Client do
     let(:schema) { 'http://github.com/redbuble/megaphone-event-type-registry/streams/work-updates-1.0.0.json' }
     let(:payload) { { url: 'http://example.rb.com/works/123456' } }
     let(:partition_key) { 42 }
+    let(:transaction_id) { 'transaction-id' }
     let(:metadata) do
       {
         topic: topic,
         subtopic: subtopic,
         schema: schema,
         partition_key: partition_key,
+        transaction_id: transaction_id,
       }
     end
 
@@ -79,6 +81,7 @@ describe Megaphone::Client do
           subtopic: subtopic,
           origin: 'some-service',
           partitionKey: partition_key,
+          transactionId: transaction_id,
           data: payload
         })
         client.publish!(payload, metadata)
@@ -112,7 +115,7 @@ describe Megaphone::Client do
       let(:expected_filename) { "work-updates.stream" }
       let(:expected_file_permission) { "a" }
       let(:expected_file_content) do
-        "{\"schema\":\"#{schema}\",\"origin\":\"some-service\",\"topic\":\"work-updates\",\"subtopic\":\"work-metadata-updated\",\"partitionKey\":42,\"data\":{\"url\":\"http://example.rb.com/works/123456\"}}"
+        "{\"schema\":\"#{schema}\",\"origin\":\"some-service\",\"topic\":\"work-updates\",\"subtopic\":\"work-metadata-updated\",\"partitionKey\":42,\"transactionId\":\"transaction-id\",\"data\":{\"url\":\"http://example.rb.com/works/123456\"}}"
       end
 
       it 'sends the event to a file' do
@@ -131,12 +134,14 @@ describe Megaphone::Client do
     let(:schema) { 'http://github.com/redbuble/megaphone-event-type-registry/streams/work-updates-1.0.0.json' }
     let(:payload) { { url: 'http://example.rb.com/works/123456' } }
     let(:partition_key) { 42 }
+    let(:transaction_id) { 'transaction-id' }
     let(:metadata) do
       {
         topic: topic,
         subtopic: subtopic,
         schema: schema,
         partition_key: partition_key,
+        transaction_id: transaction_id,
       }
     end
 

@@ -6,6 +6,7 @@ describe Megaphone::Client::Event do
   let(:origin) { 'redbubble' }
   let(:schema) { 'https://schema.example.com/path.json' }
   let(:partition_key) { 'abc123' }
+  let(:transaction_id) { 'transaction-id' }
   let(:payload) { '{message: "hello, world"}' }
   let(:metadata) do
     {
@@ -14,6 +15,7 @@ describe Megaphone::Client::Event do
       origin: origin,
       schema: schema,
       partition_key: partition_key,
+      transaction_id: transaction_id,
     }
   end
   let(:event) { Megaphone::Client::Event.new(payload, metadata) }
@@ -46,6 +48,11 @@ describe Megaphone::Client::Event do
     context 'when the origin is missing' do
       let(:origin) { nil }
       it { is_expected.to include('origin must not be empty') }
+    end
+
+    context 'when the transaction id is missing' do
+      let(:transaction_id) { nil }
+      it { is_expected.to include('transaction_id must not be empty') }
     end
 
     context 'when more than one field is missing' do
